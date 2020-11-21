@@ -13,15 +13,14 @@ namespace Api.Extensions
     public static class AuthExtensions
     {
         public static IServiceCollection AddAuthDefaults(
-            this IServiceCollection services)
+            this IServiceCollection services, 
+            AuthOptions authOptions)
         {
-            var authOptions = services.BuildServiceProvider().GetRequiredService<IOptions<AuthOptions>>();
-
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
-                    options.Authority = authOptions.Value.Authority;
-                    options.Audience = authOptions.Value.ClientId;
+                    options.Authority = authOptions.Authority;
+                    options.Audience = authOptions.ClientId;
                 });
 
             return services;

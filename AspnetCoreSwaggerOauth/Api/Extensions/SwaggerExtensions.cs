@@ -20,10 +20,8 @@ namespace Api.Extensions
         public const string SecurityDefinitionName = "aad-jwt";
         public const string Scope = "Api.SwaggerUI";
 
-        public static IServiceCollection AddSwaggerDefaults(this IServiceCollection services)
+        public static IServiceCollection AddSwaggerDefaults(this IServiceCollection services, AuthOptions authOptions)
         {
-            var authOptions = services.BuildServiceProvider().GetRequiredService<IOptions<AuthOptions>>();
-
             services.AddSwaggerGen(options =>
             {
                 options.SwaggerDoc("v1", new OpenApiInfo
@@ -45,7 +43,7 @@ namespace Api.Extensions
         public static void AddJwtSecurityDefinition(
             this SwaggerGenOptions options, 
             string name, 
-            IOptions<AuthOptions> authOptions)
+            AuthOptions authOptions)
         {
             options.AddSecurityDefinition(
                 name,
@@ -56,12 +54,12 @@ namespace Api.Extensions
                     {
                         Implicit = new OpenApiOAuthFlow
                         {
-                            AuthorizationUrl = new Uri(authOptions.Value.AuthUrl),
-                            TokenUrl = new Uri(authOptions.Value.TokenUrl),
+                            AuthorizationUrl = new Uri(authOptions.AuthUrl),
+                            TokenUrl = new Uri(authOptions.TokenUrl),
                             Scopes = new Dictionary<string, string>
                             {
                                 {
-                                    $"{authOptions.Value.ClientIdUri}/{Scope}", "Perform API operation using the Swagger UI."
+                                    $"{authOptions.ClientIdUri}/{Scope}", "Perform API operation using the Swagger UI."
                                 }
                             }
                         }
@@ -71,7 +69,7 @@ namespace Api.Extensions
             options.OperationFilter<OAuthSecurityRequirementsOperationFilter>();
         }
 
-        public static IApplicationBuilder UseSwaggerUIDefaults(this IApplicationBuilder app, IOptions<AuthOptions> authOptions)
+        public static IApplicationBuilder UseSwaggerUIDefaults(this IApplicationBuilder app, AuthOptions authOptions)
         {
             
             app.UseSwagger();
@@ -79,7 +77,7 @@ namespace Api.Extensions
             app.UseSwaggerUI(o =>
             {
                 o.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
-                o.OAuthClientId(authOptions.Value.ClientId);
+                o.OAuthClientId(authOptions.ClientId);
             });
 
             return app;

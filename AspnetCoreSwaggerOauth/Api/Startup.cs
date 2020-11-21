@@ -31,11 +31,13 @@ namespace Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var authOptions = this.Configuration.GetSection("Auth").Get<AuthOptions>();
             services.Configure<AuthOptions>(this.Configuration.GetSection("Auth"));
-            services.AddAuthDefaults();
+
+            services.AddAuthDefaults(authOptions);
 
             services.AddControllers();
-            services.AddSwaggerDefaults();
+            services.AddSwaggerDefaults(authOptions);
 
         }
 
@@ -56,7 +58,7 @@ namespace Api
                 endpoints.MapControllers();
             });
 
-            app.UseSwaggerUIDefaults(authOptions);
+            app.UseSwaggerUIDefaults(authOptions.Value);
 
         }
     }
