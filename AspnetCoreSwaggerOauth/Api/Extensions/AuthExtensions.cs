@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using Api.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 
 namespace Api.Extensions
 {
@@ -28,16 +23,16 @@ namespace Api.Extensions
 
         public static IServiceCollection AddAuthorizationDefaults(this IServiceCollection services)
         {
-            var requiredScopes = new[] {SwaggerExtensions.Scope};
+            var requiredScopes = new[] {ApiConstants.OAuth.Scope};
 
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("AuthPolicy", policy =>
+                options.AddPolicy(ApiConstants.AspNetAuth.PolicyName, policy =>
                 {
                     policy.RequireAssertion(context =>
                     {
                         var scopes = context.User.Claims
-                            .Where(c => c.Type == "http://schemas.microsoft.com/identity/claims/scope")
+                            .Where(c => c.Type == ApiConstants.OAuth.ScopeClaimType)
                             .Where(c => requiredScopes.Contains(c.Value))
                             .ToList();
 

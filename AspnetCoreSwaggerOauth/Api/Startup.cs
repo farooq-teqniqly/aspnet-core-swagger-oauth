@@ -1,21 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
 using Api.Extensions;
 using Api.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Microsoft.OpenApi.Models;
 
 namespace Api
 {
@@ -31,8 +21,9 @@ namespace Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var authOptions = this.Configuration.GetSection("Auth").Get<AuthOptions>();
-            services.Configure<AuthOptions>(this.Configuration.GetSection("Auth"));
+            var authConfigSectionName = ApiConstants.AspNetAuth.AuthConfigSectionName;
+            var authOptions = this.Configuration.GetSection(authConfigSectionName).Get<AuthOptions>();
+            services.Configure<AuthOptions>(this.Configuration.GetSection(authConfigSectionName));
 
             services.AddAuthDefaults(authOptions);
             services.AddAuthorizationDefaults();

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Api.Extensions;
-using Api.Models;
+﻿using Api.Models;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -30,11 +24,11 @@ namespace Api.Filters
                         Reference = new OpenApiReference
                         {
                             Type = ReferenceType.SecurityScheme,
-                            Id = SwaggerExtensions.SecurityDefinitionName
+                            Id = ApiConstants.OAuth.SecurityDefinitionName
                         },
                         UnresolvedReference = true
                     },
-                    new[] { $"{_authOptions.Value.ClientIdUri}/{SwaggerExtensions.Scope}" }
+                    new[] { $"{_authOptions.Value.ClientIdUri}/{ApiConstants.OAuth.Scope}" }
                 }
             });
         }

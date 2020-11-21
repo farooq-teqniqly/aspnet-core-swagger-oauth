@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using Api.Filters;
 using Api.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
@@ -17,8 +13,7 @@ namespace Api.Extensions
 {
     public static class SwaggerExtensions
     {
-        public const string SecurityDefinitionName = "aad-jwt";
-        public const string Scope = "Api.SwaggerUI";
+        
 
         public static IServiceCollection AddSwaggerDefaults(this IServiceCollection services, AuthOptions authOptions)
         {
@@ -34,7 +29,7 @@ namespace Api.Extensions
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 options.IncludeXmlComments(xmlPath);
 
-                options.AddJwtSecurityDefinition(SecurityDefinitionName, authOptions);
+                options.AddJwtSecurityDefinition(ApiConstants.OAuth.SecurityDefinitionName, authOptions);
             });
 
             return services;
@@ -59,7 +54,7 @@ namespace Api.Extensions
                             Scopes = new Dictionary<string, string>
                             {
                                 {
-                                    $"{authOptions.ClientIdUri}/{Scope}", "Perform API operation using the Swagger UI."
+                                    $"{authOptions.ClientIdUri}/{ApiConstants.OAuth.Scope}", "Perform API operation using the Swagger UI."
                                 }
                             }
                         }
