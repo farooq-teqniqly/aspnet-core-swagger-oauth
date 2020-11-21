@@ -25,5 +25,28 @@ namespace Api.Extensions
 
             return services;
         }
+
+        public static IServiceCollection AddAuthorizationDefaults(this IServiceCollection services)
+        {
+            var requiredScopes = new[] {SwaggerExtensions.Scope};
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("AuthPolicy", policy =>
+                {
+                    policy.RequireAssertion(context =>
+                    {
+                        var scopes = context.User.Claims
+                            .Where(c => c.Type == "http://schemas.microsoft.com/identity/claims/scope")
+                            .Where(c => requiredScopes.Contains(c.Value))
+                            .ToList();
+
+                        return scopes.Any();
+                    });
+                });
+            });
+
+            return services;
+        }
     }
 }

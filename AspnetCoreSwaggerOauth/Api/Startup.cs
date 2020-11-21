@@ -35,6 +35,7 @@ namespace Api
             services.Configure<AuthOptions>(this.Configuration.GetSection("Auth"));
 
             services.AddAuthDefaults(authOptions);
+            services.AddAuthorizationDefaults();
 
             services.AddControllers();
             services.AddSwaggerDefaults(authOptions);
@@ -51,6 +52,7 @@ namespace Api
 
             app.UseHttpsRedirection();
             app.UseRouting();
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
