@@ -1,4 +1,5 @@
-﻿using Api.Models;
+﻿using System.Linq;
+using Api.Models;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -28,7 +29,8 @@ namespace Api.Filters
                         },
                         UnresolvedReference = true
                     },
-                    new[] { $"{_authOptions.Value.ClientIdUri}/{ApiConstants.OAuth.Scope}" }
+                    ApiConstants.OAuth.SwaggerUIScopes.Select(s => $"{_authOptions.Value.ClientIdUri}/{s}").ToArray()
+                    //new[] { $"{_authOptions.Value.ClientIdUri}/{ApiConstants.OAuth.SwaggerUIScope}" }
                 }
             });
         }

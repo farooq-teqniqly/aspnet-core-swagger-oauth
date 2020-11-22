@@ -4,7 +4,8 @@
     {
         public static class AspNetAuth
         {
-            public const string PolicyName = "AuthPolicy";
+            public const string ReadWritePolicyName = "ReadWritePolicy";
+            public const string ReadOnlyPolicyName = "ReadOnlyPolicy";
             public const string AuthConfigSectionName = "Auth";
         }
         
@@ -12,7 +13,7 @@
         {
             public const string ScopeClaimType = "http://schemas.microsoft.com/identity/claims/scope";
             public const string SecurityDefinitionName = "aad-jwt";
-            public const string Scope = "Api.SwaggerUI";
+            public static readonly string[] SwaggerUIScopes = { "Api.SwaggerUI" };
         }
     }
 }

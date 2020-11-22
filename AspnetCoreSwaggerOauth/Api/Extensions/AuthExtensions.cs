@@ -23,17 +23,28 @@ namespace Api.Extensions
 
         public static IServiceCollection AddAuthorizationDefaults(this IServiceCollection services)
         {
-            var requiredScopes = new[] {ApiConstants.OAuth.Scope};
-
             services.AddAuthorization(options =>
             {
-                options.AddPolicy(ApiConstants.AspNetAuth.PolicyName, policy =>
+                options.AddPolicy(ApiConstants.AspNetAuth.ReadWritePolicyName, policy =>
                 {
                     policy.RequireAssertion(context =>
                     {
                         var scopes = context.User.Claims
                             .Where(c => c.Type == ApiConstants.OAuth.ScopeClaimType)
-                            .Where(c => requiredScopes.Contains(c.Value))
+                            .Where(c => ApiConstants.OAuth.SwaggerUIScopes.Contains(c.Value))
+                            .ToList();
+
+                        return scopes.Any();
+                    });
+                });
+
+                options.AddPolicy(ApiConstants.AspNetAuth.ReadOnlyPolicyName, policy =>
+                {
+                    policy.RequireAssertion(context =>
+                    {
+                        var scopes = context.User.Claims
+                            .Where(c => c.Type == ApiConstants.OAuth.ScopeClaimType)
+                            .Where(c => ApiConstants.OAuth.SwaggerUIScopes.Contains(c.Value))
                             .ToList();
 
                         return scopes.Any();

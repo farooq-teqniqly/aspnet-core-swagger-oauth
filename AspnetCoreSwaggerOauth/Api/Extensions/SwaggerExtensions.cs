@@ -40,6 +40,13 @@ namespace Api.Extensions
             string name, 
             AuthOptions authOptions)
         {
+            var scopesDictionary = new Dictionary<string, string>();
+
+            foreach (var scope in ApiConstants.OAuth.SwaggerUIScopes)
+            {
+                scopesDictionary.Add($"{authOptions.ClientIdUri}/{scope}", "Perform API operations.");
+            }
+
             options.AddSecurityDefinition(
                 name,
                 new OpenApiSecurityScheme
@@ -51,12 +58,7 @@ namespace Api.Extensions
                         {
                             AuthorizationUrl = new Uri(authOptions.AuthUrl),
                             TokenUrl = new Uri(authOptions.TokenUrl),
-                            Scopes = new Dictionary<string, string>
-                            {
-                                {
-                                    $"{authOptions.ClientIdUri}/{ApiConstants.OAuth.Scope}", "Perform API operation using the Swagger UI."
-                                }
-                            }
+                            Scopes = scopesDictionary
                         }
                     }
                 });
