@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using Api.Filters;
 using Api.Models;
@@ -40,13 +41,6 @@ namespace Api.Extensions
             string name, 
             AuthOptions authOptions)
         {
-            var scopesDictionary = new Dictionary<string, string>();
-
-            foreach (var scope in ApiConstants.OAuth.SwaggerUIScopes)
-            {
-                scopesDictionary.Add($"{authOptions.ClientIdUri}/{scope}", "Perform API operations.");
-            }
-
             options.AddSecurityDefinition(
                 name,
                 new OpenApiSecurityScheme
@@ -58,7 +52,7 @@ namespace Api.Extensions
                         {
                             AuthorizationUrl = new Uri(authOptions.AuthUrl),
                             TokenUrl = new Uri(authOptions.TokenUrl),
-                            Scopes = scopesDictionary
+                            Scopes = ApiConstants.OAuth.SwaggerUIScopes.ToDictionary(s => $"{authOptions.ClientIdUri}/{s}")
                         }
                     }
                 });

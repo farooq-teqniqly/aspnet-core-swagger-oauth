@@ -30,7 +30,6 @@ namespace Api.Filters
                         UnresolvedReference = true
                     },
                     ApiConstants.OAuth.SwaggerUIScopes.Select(s => $"{_authOptions.Value.ClientIdUri}/{s}").ToArray()
-                    //new[] { $"{_authOptions.Value.ClientIdUri}/{ApiConstants.OAuth.SwaggerUIScope}" }
                 }
             });
         }
