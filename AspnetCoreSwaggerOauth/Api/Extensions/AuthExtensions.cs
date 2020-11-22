@@ -34,7 +34,7 @@ namespace Api.Extensions
                             .Where(c => ApiConstants.OAuth.SwaggerUIScopes.Contains(c.Value))
                             .ToList();
 
-                        return scopes.Any();
+                        return scopes.Any() || context.User.IsInRole("Weather.Writer");
                     });
                 });
 
@@ -47,7 +47,7 @@ namespace Api.Extensions
                             .Where(c => ApiConstants.OAuth.SwaggerUIScopes.Contains(c.Value))
                             .ToList();
 
-                        return scopes.Any();
+                        return scopes.Any() || context.User.IsInRole("Weather.Reader");
                     });
                 });
             });
